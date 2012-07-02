@@ -17,35 +17,46 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.metadata.service;
+package org.ow2.play.metadata.client;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jws.WebMethod;
 
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
+import org.ow2.play.metadata.api.service.MetadataService;
+import org.petalslink.dsb.cxf.CXFHelper;
 
 /**
+ * A CXF-based client for the metadata service
+ * 
  * @author chamerling
  * 
  */
-public class InMemoryMetadataServiceImpl implements
-		org.ow2.play.metadata.api.service.MetadataService {
+public class MetadataClient implements MetadataService {
 
-	Map<Resource, Set<Metadata>> metadata;
+	private String url;
+
+	private MetadataService client;
 
 	/**
 	 * 
 	 */
-	public InMemoryMetadataServiceImpl() {
-		this.metadata = new ConcurrentHashMap<Resource, Set<Metadata>>();
+	public MetadataClient(String endpoint) {
+		if (endpoint == null) {
+			throw new IllegalArgumentException("Endpoint can not be null");
+		}
+		this.url = endpoint;
+	}
+
+	protected synchronized MetadataService getClient() {
+		if (this.client == null) {
+			this.client = CXFHelper.getClientFromFinalURL(url,
+					MetadataService.class);
+		}
+		return this.client;
 	}
 
 	/*
@@ -59,10 +70,7 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public void addMetadata(Resource resource, Metadata metadata)
 			throws MetadataException {
-		if (!resourceExists(resource)) {
-			create(resource);
-		}
-		this.metadata.get(resource).add(metadata);
+		getClient().addMetadata(resource, metadata);
 	}
 
 	/*
@@ -74,12 +82,9 @@ public class InMemoryMetadataServiceImpl implements
 	 */
 	@Override
 	@WebMethod
-	public synchronized void removeMetadata(Resource resource, Metadata metadata)
+	public void removeMetadata(Resource resource, Metadata metadata)
 			throws MetadataException {
-		if (!resourceExists(resource)) {
-			return;
-		}
-		this.metadata.get(resource).remove(metadata);
+		getClient().removeMetadata(resource, metadata);
 	}
 
 	/*
@@ -93,10 +98,7 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public List<Metadata> getMetaData(Resource resource)
 			throws MetadataException {
-		if (resourceExists(resource))
-			return new ArrayList<Metadata>(metadata.get(resource));
-
-		return new ArrayList<Metadata>();
+		return getClient().getMetaData(resource);
 	}
 
 	/*
@@ -110,8 +112,7 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public Metadata getMetadataValue(Resource resource, String key)
 			throws MetadataException {
-		// TODO Auto-generated method stub
-		return null;
+		return getClient().getMetadataValue(resource, key);
 	}
 
 	/*
@@ -124,13 +125,7 @@ public class InMemoryMetadataServiceImpl implements
 	@Override
 	@WebMethod
 	public boolean deleteMetaData(Resource resource) throws MetadataException {
-		if (resourceExists(resource)) {
-			synchronized (this.metadata) {
-				this.metadata.remove(resource);
-			}
-			return true;
-		}
-		return false;
+		return getClient().deleteMetaData(resource);
 	}
 
 	/*
@@ -144,16 +139,7 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public List<Metadata> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException {
-		throw new MetadataException("Not implemented");
+		return getClient().getResoucesWithMeta(include);
 	}
 
-	protected boolean resourceExists(Resource r) {
-		return r != null && metadata.containsKey(r);
-	}
-
-	protected synchronized void create(Resource resource) {
-		if (!resourceExists(resource)) {
-			metadata.put(resource, new HashSet<Metadata>());
-		}
-	}
 }
