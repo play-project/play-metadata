@@ -74,4 +74,15 @@ public class MetaResource {
 	public void setMetadata(List<Metadata> metadata) {
 		this.metadata = metadata;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MetaResource [resource=" + resource + ", metadata=" + metadata
+				+ "]";
+	}
 }

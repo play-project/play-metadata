@@ -19,34 +19,34 @@
  */
 package org.ow2.play.metadata.json;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
-import org.ow2.play.metadata.api.service.MetaDataSerializer;
-import org.ow2.play.metadata.json.gson.ResourceMetaSerializer;
+import org.ow2.play.metadata.api.service.MetadataDeserializer;
+import org.ow2.play.metadata.json.gson.ResourceMetaDeserializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 /**
  * @author chamerling
  * 
  */
-public class GsonMetadataSerializer implements MetaDataSerializer {
+public class GsonMetadataDeserializer implements MetadataDeserializer {
 
 	private Gson gson;
 
-	/**
-	 * 
-	 */
-	public GsonMetadataSerializer() {
+	public GsonMetadataDeserializer() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(MetaResource.class,
-				new ResourceMetaSerializer());
+				new ResourceMetaDeserializer());
 		gson = builder.create();
 	}
 
@@ -54,23 +54,27 @@ public class GsonMetadataSerializer implements MetaDataSerializer {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.ow2.play.metadata.api.service.MetaDataSerializer#write(org.ow2.play
-	 * .metadata.api.Resource, org.ow2.play.metadata.api.Metadata,
-	 * java.io.OutputStream)
+	 * org.ow2.play.metadata.api.service.MetadataDeserializer#read(java.net.URL)
 	 */
 	@Override
-	public void write(List<MetaResource> metaResource, OutputStream os)
-			throws MetadataException {
+	public List<MetaResource> read(InputStream is) throws MetadataException {
 
-		if (os == null) {
-			throw new MetadataException("Null output stream is not allowed...");
-		}
+		Type type = new TypeToken<List<MetaResource>>() {
+		}.getType();
 
+		// FIXME : DO not know why we should hack like this.
+		// We cannot do something like List<MetaResource> out = gson.fromJson(reader, type);
+		// if we do that, we have a list of list of metaresource and then it fails...
+		List<MetaResource> result = new ArrayList<MetaResource>();
 		try {
-			IOUtils.write(gson.toJson(metaResource), os);
-		} catch (IOException e) {
+			JsonReader reader = new JsonReader(new InputStreamReader(is));
+			List<List<MetaResource>> o = gson.fromJson(reader, type);
+			if (o.get(0) != null) {
+				result.addAll(o.get(0));
+			}
+		} catch (Exception e) {
 			throw new MetadataException(e);
 		}
+		return result;
 	}
-	
 }

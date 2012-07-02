@@ -19,7 +19,7 @@
  */
 package org.ow2.play.metadata.api.service;
 
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import org.ow2.play.metadata.api.MetaResource;
@@ -29,17 +29,15 @@ import org.ow2.play.metadata.api.MetadataException;
  * @author chamerling
  * 
  */
-public interface MetaDataSerializer {
+public interface MetadataDeserializer {
 
 	/**
-	 * Writes a resource and its attached metadata to the outputstream
+	 * Create the resource and its associated metadata from a resource
 	 * 
-	 * @param resouce
-	 * @param metadata
-	 * @param os
+	 * @param url
+	 * @return
 	 * @throws MetadataException
 	 */
-	void write(List<MetaResource> metaResource, OutputStream os)
-			throws MetadataException;
-	
+	List<MetaResource> read(InputStream is) throws MetadataException;
+
 }

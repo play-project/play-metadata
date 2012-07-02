@@ -17,29 +17,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA 
  *
  */
-package org.ow2.play.metadata.api.service;
+package org.ow2.play.metadata.json;
 
-import java.io.OutputStream;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.ow2.play.metadata.api.MetaResource;
-import org.ow2.play.metadata.api.MetadataException;
 
 /**
  * @author chamerling
  * 
  */
-public interface MetaDataSerializer {
+public class GsonMetadataDeserializerTest extends TestCase {
 
-	/**
-	 * Writes a resource and its attached metadata to the outputstream
-	 * 
-	 * @param resouce
-	 * @param metadata
-	 * @param os
-	 * @throws MetadataException
-	 */
-	void write(List<MetaResource> metaResource, OutputStream os)
-			throws MetadataException;
-	
+	public void testDeserializeFromResource() throws Exception {
+		GsonMetadataDeserializer deserializer = new GsonMetadataDeserializer();
+		List<MetaResource> result = deserializer
+				.read(GsonMetadataDeserializerTest.class
+						.getResourceAsStream("/metadata-1resource.rdf.json"));
+
+		assertEquals(1, result.size());
+	}
+
+	public void testDeserializeFromResource2() throws Exception {
+		GsonMetadataDeserializer deserializer = new GsonMetadataDeserializer();
+		List<MetaResource> result = deserializer
+				.read(GsonMetadataDeserializerTest.class
+						.getResourceAsStream("/metadata-2resources.rdf.json"));
+
+		assertEquals(2, result.size());
+	}
+
 }

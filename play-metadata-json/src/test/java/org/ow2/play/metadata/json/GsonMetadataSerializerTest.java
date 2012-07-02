@@ -25,6 +25,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.ow2.play.metadata.api.Data;
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.Resource;
 
@@ -46,14 +47,23 @@ public class GsonMetadataSerializerTest extends TestCase {
 		meta.add(new Metadata("http://purl.org/dc/elements/1.1/description",
 				new Data("literal", "A stream of Facebook Wall updates.")));
 
+		MetaResource mr = new MetaResource(r, meta);
+		
+		List<MetaResource> list = new ArrayList<MetaResource>();
+		list.add(mr);
+
 		org.apache.commons.io.output.ByteArrayOutputStream bos = new org.apache.commons.io.output.ByteArrayOutputStream();
-		serializer.write(r, meta, bos);
-		 
+		serializer.write(list, bos);
+
 		String out = bos.toString();
+		
+		System.out.println(out);
+		
 		assertNotNull(out);
 		assertTrue(out.length() > 0);
-		assertTrue(out.indexOf("http://streams.event-processing.org/ids/FacebookStatusFeed#stream") == 2);
-		
+		assertTrue(out
+				.indexOf("http://streams.event-processing.org/ids/FacebookStatusFeed#stream") == 3);
+
 		System.out.println(out);
 	}
 
