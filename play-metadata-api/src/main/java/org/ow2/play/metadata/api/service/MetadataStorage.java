@@ -19,10 +19,29 @@
  */
 package org.ow2.play.metadata.api.service;
 
+import java.util.List;
+import java.util.Properties;
+
+import org.ow2.play.metadata.api.MetaResource;
+import org.ow2.play.metadata.api.MetadataException;
+
 /**
  * @author chamerling
- *
+ * 
  */
-public class MetadataStorage {
+public interface MetadataStorage {
 
+	/**
+	 * Initialize the storage
+	 * 
+	 * @throws MetadataException
+	 */
+	void init(Properties props) throws MetadataException;
+	
+	void store(MetaResource metaResource) throws MetadataException;
+	
+	MetaResource get(String name, String url) throws MetadataException;
+	
+	List<MetaResource> list() throws MetadataException;
+	
 }

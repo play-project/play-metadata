@@ -58,7 +58,7 @@ public class InMemoryMetadataTest extends TestCase {
 		Resource rr = new Resource("bar", "http://foo");
 
 		assertTrue(service.getMetaData(rr).size() == 0);
-		
+
 		assertTrue(service.getMetaData(null).size() == 0);
 
 	}
@@ -68,7 +68,7 @@ public class InMemoryMetadataTest extends TestCase {
 		Resource r = new Resource("foo", "http://bar");
 		Metadata m = new Metadata("name", new Data("type", "value"));
 		Metadata mm = new Metadata("name1", new Data("type1", "value1"));
-		
+
 		service.addMetadata(r, m);
 		service.addMetadata(r, mm);
 
@@ -76,28 +76,45 @@ public class InMemoryMetadataTest extends TestCase {
 
 		assertTrue(service.getMetaData(r).size() == 1);
 	}
-	
+
 	public void testAddNSame() throws Exception {
 		InMemoryMetadataServiceImpl service = new InMemoryMetadataServiceImpl();
 		Resource r = new Resource("foo", "http://bar");
 		Metadata m = new Metadata("name", new Data("type", "value"));
-		
+
 		service.addMetadata(r, m);
 		service.addMetadata(r, m);
-		
+
 		assertEquals(1, service.getMetaData(r).size());
 	}
-	
+
 	public void testDelete() throws Exception {
 		InMemoryMetadataServiceImpl service = new InMemoryMetadataServiceImpl();
 		Resource r = new Resource("foo", "http://bar");
 		Metadata m = new Metadata("name", new Data("type", "value"));
 		Metadata mm = new Metadata("name1", new Data("type1", "value1"));
-		
+
 		service.addMetadata(r, m);
 		service.addMetadata(r, mm);
-		
+
 		service.deleteMetaData(r);
 		assertEquals(0, service.getMetaData(r).size());
+	}
+
+	public void testGetMetadataValue() throws Exception {
+		InMemoryMetadataServiceImpl service = new InMemoryMetadataServiceImpl();
+		Resource r = new Resource("foo", "http://bar");
+		Metadata m = new Metadata("findme", new Data("type", "value"));
+		service.addMetadata(r, m);
+
+		assertNull(service.getMetadataValue(r, "foo"));
+		
+		Metadata result = service.getMetadataValue(r, "findme");
+		
+		assertNotNull(result);
+		assertEquals("findme", result.getName());
+		assertEquals(1, result.getData().size());
+		assertEquals(new Data("type", "value"), result.getData().get(0));
+		
 	}
 }

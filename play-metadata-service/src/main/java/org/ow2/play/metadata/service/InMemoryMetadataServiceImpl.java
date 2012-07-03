@@ -21,6 +21,7 @@ package org.ow2.play.metadata.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.jws.WebMethod;
 
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
@@ -110,8 +112,20 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public Metadata getMetadataValue(Resource resource, String key)
 			throws MetadataException {
-		// TODO Auto-generated method stub
-		return null;
+		Metadata result = null;
+		if (resourceExists(resource)) {
+			Set<Metadata> set = metadata.get(resource);
+			Iterator<Metadata> iter = set.iterator();
+			boolean found = false;
+			while (iter.hasNext() && !found) {
+				Metadata meta = iter.next();
+				found = key.equals(meta.getName());
+				if (found) {
+					result = meta;
+				}
+			}
+		}
+		return result;
 	}
 
 	/*
@@ -142,7 +156,7 @@ public class InMemoryMetadataServiceImpl implements
 	 */
 	@Override
 	@WebMethod
-	public List<Metadata> getResoucesWithMeta(List<Metadata> include)
+	public List<MetaResource> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException {
 		throw new MetadataException("Not implemented");
 	}

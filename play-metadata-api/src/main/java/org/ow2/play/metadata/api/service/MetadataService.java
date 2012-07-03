@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.jws.WebMethod;
 
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
@@ -34,21 +35,57 @@ import org.ow2.play.metadata.api.Resource;
  */
 public interface MetadataService {
 
+	/**
+	 * Add metadata to a resource. Creates the resource if it do not exists.
+	 * 
+	 * @param resource
+	 * @param metadata
+	 * @throws MetadataException
+	 */
 	@WebMethod
 	void addMetadata(Resource resource, Metadata metadata)
 			throws MetadataException;
 
+	/**
+	 * Remove the metadata from the resource
+	 * 
+	 * @param resource
+	 * @param metadata
+	 * @throws MetadataException
+	 */
 	@WebMethod
 	void removeMetadata(Resource resource, Metadata metadata)
 			throws MetadataException;
 
+	/**
+	 * Get all the metadata of the given resource
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws MetadataException
+	 */
 	@WebMethod
 	List<Metadata> getMetaData(Resource resource) throws MetadataException;
 
+	/**
+	 * Get the metadata value
+	 * 
+	 * @param resource
+	 * @param key
+	 * @return
+	 * @throws MetadataException
+	 */
 	@WebMethod
 	Metadata getMetadataValue(Resource resource, String key)
 			throws MetadataException;
 
+	/**
+	 * Delete all the metadata of the given resource
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws MetadataException
+	 */
 	@WebMethod
 	boolean deleteMetaData(Resource resource) throws MetadataException;
 
@@ -61,6 +98,6 @@ public interface MetadataService {
 	 * @throws MetadataException
 	 */
 	@WebMethod
-	public List<Metadata> getResoucesWithMeta(List<Metadata> include)
+	public List<MetaResource> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException;
 }
