@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.jws.WebMethod;
 
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
@@ -137,7 +138,7 @@ public class MetadataClient implements MetadataService {
 	 */
 	@Override
 	@WebMethod
-	public List<Metadata> getResoucesWithMeta(List<Metadata> include)
+	public List<MetaResource> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException {
 		return getClient().getResoucesWithMeta(include);
 	}

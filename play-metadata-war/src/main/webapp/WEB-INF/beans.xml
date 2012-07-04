@@ -12,7 +12,18 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 	<bean id="metaservice"
 		class="org.ow2.play.metadata.service.InMemoryMetadataServiceImpl" />
 
+	<bean id="metaloader"
+		class="org.ow2.play.metadata.json.JSONMetadataLoaderImpl" />
+
+	<bean id="bootservice" class="org.ow2.play.metadata.service.BootstrapServiceImpl">
+		<property name="metadataService" ref="metaservice" />
+		<property name="metadataLoader" ref="metaloader" />
+	</bean>
+
 	<jaxws:endpoint id="meta" implementor="#metaservice"
 		address="/MetadataService" />
+
+	<jaxws:endpoint id="boot" implementor="#bootservice"
+		address="/BootService" />
 
 </beans>
