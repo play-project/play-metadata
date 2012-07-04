@@ -19,10 +19,12 @@
  */
 package org.ow2.play.metadata.api.service;
 
-import java.net.URL;
 import java.util.List;
 
-import org.ow2.play.metadata.api.Metadata;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
 
 /**
@@ -31,6 +33,7 @@ import org.ow2.play.metadata.api.MetadataException;
  * @author chamerling
  * 
  */
+@WebService
 public interface MetadataLoader {
 
 	/**
@@ -41,6 +44,7 @@ public interface MetadataLoader {
 	 * @return
 	 * @throws MetadataException
 	 */
-	List<Metadata> load(URL resource) throws MetadataException;
+	@WebMethod
+	List<MetaResource> load(String resourceURL) throws MetadataException;
 
 }

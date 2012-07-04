@@ -40,6 +40,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 /**
+ * Deserialize an array of resourcemeta as list
+ * 
  * @author chamerling
  * 
  */
@@ -56,7 +58,7 @@ public class ResourceMetaDeserializer implements
 	@Override
 	public List<MetaResource> deserialize(JsonElement json, Type typeOfT,
 			JsonDeserializationContext context) throws JsonParseException {
-		
+
 		List<MetaResource> result = new ArrayList<MetaResource>();
 		JsonObject object = json.getAsJsonObject();
 
@@ -79,7 +81,7 @@ public class ResourceMetaDeserializer implements
 				resource.setName(entry.getKey());
 				resource.setUrl(entry.getKey());
 			}
-			
+
 			JsonObject metas = entry.getValue().getAsJsonObject();
 			Set<Map.Entry<String, JsonElement>> metass = metas.entrySet();
 			for (Entry<String, JsonElement> entry2 : metass) {
@@ -98,7 +100,7 @@ public class ResourceMetaDeserializer implements
 			}
 			result.add(new MetaResource(resource, meta));
 		}
-		
+
 		return result;
 	}
 }

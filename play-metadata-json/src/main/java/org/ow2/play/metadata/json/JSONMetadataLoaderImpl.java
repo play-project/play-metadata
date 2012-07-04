@@ -19,10 +19,12 @@
  */
 package org.ow2.play.metadata.json;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.ow2.play.metadata.api.Metadata;
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.service.MetadataLoader;
 
@@ -36,9 +38,23 @@ public class JSONMetadataLoaderImpl implements MetadataLoader {
 	 * @see org.ow2.play.metadata.api.service.MetadataLoader#load(java.net.URL)
 	 */
 	@Override
-	public List<Metadata> load(URL resource) throws MetadataException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<MetaResource> load(String url) throws MetadataException {
+		if (url == null) {
+			throw new MetadataException("URL can not be null");
+		}
+		List<MetaResource> result = new ArrayList<MetaResource>();
+		
+		try {
+			InputStream is = new URL(url).openStream();
+			if (is != null) {
+				GsonMapMetadataDeserializer deserializer = new GsonMapMetadataDeserializer();
+				result.addAll(deserializer.read(is));
+			}
+		} catch (Exception e) {
+			throw new MetadataException(e);
+		}
+		
+		return result;
 	}
 
 }
