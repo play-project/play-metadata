@@ -22,6 +22,7 @@ package org.ow2.play.metadata.api.service;
 import java.util.List;
 
 import javax.jws.WebMethod;
+import javax.jws.WebService;
 
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
@@ -33,6 +34,7 @@ import org.ow2.play.metadata.api.Resource;
  * @author chamerling
  * 
  */
+@WebService
 public interface MetadataService {
 
 	/**
