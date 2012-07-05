@@ -117,4 +117,14 @@ public class InMemoryMetadataTest extends TestCase {
 		assertEquals(new Data("type", "value"), result.getData().get(0));
 		
 	}
+	
+	public void testList() throws Exception {
+		InMemoryMetadataServiceImpl service = new InMemoryMetadataServiceImpl();
+		Resource r = new Resource("foo", "http://bar");
+		Metadata m = new Metadata("findme", new Data("type", "value"));
+		service.addMetadata(r, m);
+
+		assertNotNull(service.list());
+		assertTrue(service.list().size() == 1);
+	}
 }
