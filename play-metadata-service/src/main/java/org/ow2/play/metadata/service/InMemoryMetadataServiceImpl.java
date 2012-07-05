@@ -24,8 +24,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
 
@@ -40,6 +42,9 @@ import org.ow2.play.metadata.api.Resource;
  */
 public class InMemoryMetadataServiceImpl implements
 		org.ow2.play.metadata.api.service.MetadataService {
+
+	private static Logger logger = Logger
+			.getLogger(InMemoryMetadataServiceImpl.class.getName());
 
 	Map<Resource, Set<Metadata>> metadata;
 
@@ -61,9 +66,12 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public void addMetadata(Resource resource, Metadata metadata)
 			throws MetadataException {
+		logger.info("Add meta to " + resource);
+
 		if (!resourceExists(resource)) {
 			create(resource);
 		}
+
 		this.metadata.get(resource).add(metadata);
 	}
 
@@ -78,6 +86,8 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public synchronized void removeMetadata(Resource resource, Metadata metadata)
 			throws MetadataException {
+		logger.info("Remove metadata from " + resource);
+
 		if (!resourceExists(resource)) {
 			return;
 		}
@@ -95,6 +105,8 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public List<Metadata> getMetaData(Resource resource)
 			throws MetadataException {
+		logger.info("Get metadatas from " + resource);
+
 		if (resourceExists(resource))
 			return new ArrayList<Metadata>(metadata.get(resource));
 
@@ -112,6 +124,9 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public Metadata getMetadataValue(Resource resource, String key)
 			throws MetadataException {
+		logger.info("Get metadata value for resource " + resource
+				+ " and metakey " + key);
+
 		Metadata result = null;
 		if (resourceExists(resource)) {
 			Set<Metadata> set = metadata.get(resource);
@@ -138,6 +153,8 @@ public class InMemoryMetadataServiceImpl implements
 	@Override
 	@WebMethod
 	public boolean deleteMetaData(Resource resource) throws MetadataException {
+		logger.info("Delete metadata from resource " + resource);
+
 		if (resourceExists(resource)) {
 			synchronized (this.metadata) {
 				this.metadata.remove(resource);
@@ -158,7 +175,30 @@ public class InMemoryMetadataServiceImpl implements
 	@WebMethod
 	public List<MetaResource> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException {
+		logger.info("Get resources with meta " + include);
+
 		throw new MetadataException("Not implemented");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.ow2.play.metadata.api.service.MetadataService#list()
+	 */
+	@Override
+	@WebMethod
+	public List<MetaResource> list() {
+		logger.info("Get list of resources");
+		List<MetaResource> result = new ArrayList<MetaResource>();
+		if (metadata != null) {
+			for (Entry<Resource, Set<Metadata>> metaResource : metadata
+					.entrySet()) {
+				result.add(new MetaResource(metaResource.getKey(),
+						new ArrayList<Metadata>(metaResource.getValue())));
+
+			}
+		}
+		return result;
 	}
 
 	protected boolean resourceExists(Resource r) {

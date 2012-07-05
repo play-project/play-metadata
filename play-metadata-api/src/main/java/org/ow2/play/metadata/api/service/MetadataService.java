@@ -98,6 +98,14 @@ public interface MetadataService {
 	 * @throws MetadataException
 	 */
 	@WebMethod
-	public List<MetaResource> getResoucesWithMeta(List<Metadata> include)
+	List<MetaResource> getResoucesWithMeta(List<Metadata> include)
 			throws MetadataException;
+
+	/**
+	 * Get all...
+	 * 
+	 * @return
+	 */
+	@WebMethod
+	List<MetaResource> list();
 }
