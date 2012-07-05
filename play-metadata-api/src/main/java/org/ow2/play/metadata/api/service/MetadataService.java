@@ -34,7 +34,7 @@ import org.ow2.play.metadata.api.Resource;
  * @author chamerling
  * 
  */
-@WebService
+@WebService(targetNamespace="http://service.metadata.play.ow2.org/")
 public interface MetadataService {
 
 	/**
