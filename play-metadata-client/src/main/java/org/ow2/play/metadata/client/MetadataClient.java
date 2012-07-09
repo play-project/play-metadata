@@ -143,4 +143,15 @@ public class MetadataClient implements MetadataService {
 		return getClient().getResoucesWithMeta(include);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.ow2.play.metadata.api.service.MetadataService#list()
+	 */
+	@Override
+	@WebMethod
+	public List<MetaResource> list() {
+		return getClient().list();
+	}
+
 }
