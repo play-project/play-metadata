@@ -20,7 +20,6 @@
 package org.ow2.play.metadata.mongodb;
 
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 import junit.framework.TestCase;
@@ -49,13 +48,13 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testInit() {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 	}
 
 	public void testAddMetadata() {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		try {
 			mongoMetadataServiceImpl.addMetadata(new Resource("foo",
@@ -70,7 +69,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	public void testFindFirstResource() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		try {
 			mongoMetadataServiceImpl.addMetadata(new Resource("foo",
@@ -105,7 +104,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	public void testFindAllResource() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		String name = UUID.randomUUID().toString();
 
@@ -133,7 +132,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	public void testRemove() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		long entries = mongoMetadataServiceImpl.getDbCollection().count();
 		System.out.println("NB of entries : " + entries);
@@ -156,7 +155,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	public void testAddMetadataToexistingResource() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		String name = UUID.randomUUID().toString();
 		Resource r = new Resource(name, "http://bar");
@@ -188,7 +187,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	public void testGetMetadata() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		String name = UUID.randomUUID().toString();
 		Resource r = new Resource(name, "http://bar");
@@ -210,7 +209,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	public void testGetMetadataValue() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
-		mongoMetadataServiceImpl.init(new Properties());
+		mongoMetadataServiceImpl.init();
 
 		String name = UUID.randomUUID().toString();
 		Resource r = new Resource(name, "http://bar");

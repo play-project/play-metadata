@@ -68,6 +68,8 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 	private Mongo mongo;
 	private DBCollection collection;
 
+	private Properties properties;
+
 	private boolean initialized = false;
 
 	private static Logger logger = Logger
@@ -89,7 +91,7 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 	 * )
 	 */
 	@Override
-	public void init(Properties properties) {
+	public void init() {
 		if (mongo != null) {
 			close();
 		}
@@ -483,5 +485,13 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 	 */
 	public void setBsonAdapter(BSONAdapter bsonAdapter) {
 		this.bsonAdapter = bsonAdapter;
+	}
+
+	/**
+	 * @param properties
+	 *            the properties to set
+	 */
+	public void setProperties(Properties properties) {
+		this.properties = properties;
 	}
 }

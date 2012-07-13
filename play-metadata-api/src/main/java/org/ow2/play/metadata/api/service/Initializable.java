@@ -19,7 +19,6 @@
  */
 package org.ow2.play.metadata.api.service;
 
-import java.util.Properties;
 
 /**
  * @author chamerling
@@ -27,6 +26,6 @@ import java.util.Properties;
  */
 public interface Initializable {
 	
-	void init(Properties properties);
+	void init();
 
 }
