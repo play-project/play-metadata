@@ -19,6 +19,7 @@
  */
 package org.ow2.play.metadata.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class MetaResource {
 	 * 
 	 */
 	public MetaResource() {
+		metadata = new ArrayList<Metadata>();
 	}
 
 	public MetaResource(Resource resource, List<Metadata> metadata) {

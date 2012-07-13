@@ -107,7 +107,8 @@ public interface MetadataService {
 	 * Get all...
 	 * 
 	 * @return
+	 * @throws MetadataException 
 	 */
 	@WebMethod
-	List<MetaResource> list();
+	List<MetaResource> list() throws MetadataException;
 }
