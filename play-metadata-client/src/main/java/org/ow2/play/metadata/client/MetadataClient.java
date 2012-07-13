@@ -150,7 +150,7 @@ public class MetadataClient implements MetadataService {
 	 */
 	@Override
 	@WebMethod
-	public List<MetaResource> list() {
+	public List<MetaResource> list() throws MetadataException {
 		return getClient().list();
 	}
 
