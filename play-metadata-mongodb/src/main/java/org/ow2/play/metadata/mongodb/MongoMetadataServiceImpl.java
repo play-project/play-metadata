@@ -105,6 +105,7 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 			port = properties.getProperty("mongo.port", DEFAULT_MONGO_DB_PORT);
 			userName = properties.getProperty("mongo.username", userName);
 			password = properties.getProperty("mongo.password", password);
+			collectionName = properties.getProperty("mongo.collection", DEFAULT_MONGO_DB_COLLECTION_NAME);
 		}
 
 		if (logger.isLoggable(Level.INFO)) {
