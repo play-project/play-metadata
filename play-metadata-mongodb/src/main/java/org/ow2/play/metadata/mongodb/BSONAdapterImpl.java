@@ -130,21 +130,29 @@ public class BSONAdapterImpl implements BSONAdapter {
 		if (o != null && o instanceof BasicDBList) {
 			BasicDBList metalist = (BasicDBList) o;
 			for (Object object : metalist) {
-				DBObject entry = (DBObject) object;
-				Metadata md = new Metadata();
-				md.setName(entry.get("name").toString());
 
-				Object data = entry.get("data");
-				if (data != null && data instanceof BasicDBList) {
-					BasicDBList list = (BasicDBList) data;
-					for (Object object2 : list) {
-						md.getData().add(
-								new Data(((DBObject) object2).get("type")
-										.toString(), ((DBObject) object2).get(
-										"value").toString()));
+				if (object != null && object instanceof DBObject) {
+					DBObject entry = (DBObject) object;
+
+					System.out.println(entry);
+
+					Metadata md = new Metadata();
+					md.setName(entry.get("name").toString());
+
+					Object data = entry.get("data");
+					if (data != null && data instanceof BasicDBList) {
+						BasicDBList list = (BasicDBList) data;
+						for (Object object2 : list) {
+							md.getData().add(
+									new Data(((DBObject) object2).get("type")
+											.toString(), ((DBObject) object2)
+											.get("value").toString()));
+						}
 					}
+					result.getMetadata().add(md);
+				} else {
+					System.out.println("BAD object : " + object);
 				}
-				result.getMetadata().add(md);
 			}
 		}
 		return result;

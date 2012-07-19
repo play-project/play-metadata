@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
@@ -92,6 +93,8 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 	 */
 	@Override
 	public void init() {
+		logger.info("Initializing metadata service");
+
 		if (mongo != null) {
 			close();
 		}
@@ -102,6 +105,12 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 			port = properties.getProperty("mongo.port", DEFAULT_MONGO_DB_PORT);
 			userName = properties.getProperty("mongo.username", userName);
 			password = properties.getProperty("mongo.password", password);
+		}
+
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info(String.format(
+					"Connection to %s %s with credentials %s %s", hostname,
+					port, userName, "******"));
 		}
 
 		List<ServerAddress> addresses = getServerAddresses(hostname, port);
@@ -135,11 +144,17 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 	public void addMetadata(Resource resource, Metadata metadata)
 			throws MetadataException {
 
+		if (logger.isLoggable(Level.INFO))
+			logger.info(String.format("Adding metdata %s to resource %s",
+					metadata, resource));
+
 		checkInitialized();
 
 		DBObject o = findFirst(resource);
 		if (o != null) {
-			logger.fine("Add metadata to the current entry");
+
+			if (logger.isLoggable(Level.FINE))
+			logger.fine("Resource already exists, Add metadata to the current entry");
 			// update the current record
 
 			Object meta = o.get("metadata");
@@ -149,14 +164,18 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 				list.add(metabson);
 				this.collection.save(o);
 			} else {
-				logger.warning("Can not find the list to add metadata to...");
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Can not find the list to add metadata to...");
 			}
 		} else {
 			// create
-			logger.fine("Create a new meta resource entry in the DB");
+			if (logger.isLoggable(Level.INFO))
+				logger.info("Resource does not exists, Create a new meta resource entry in the DB");
 
 			List<Metadata> list = new ArrayList<Metadata>();
-			list.add(metadata);
+			if (metadata != null) {
+				list.add(metadata);
+			}
 			MetaResource metaResource = new MetaResource(resource, list);
 
 			DBObject bson = bsonAdapter.createBSON(metaResource);
@@ -315,9 +334,19 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 		Iterator<DBObject> iter = cursor.iterator();
 		while (iter.hasNext()) {
 			DBObject dbObject = iter.next();
-			MetaResource mr = bsonAdapter.readMetaResource(dbObject);
-			if (mr != null) {
-				result.add(mr);
+
+			if (dbObject != null) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine(dbObject.toString());
+				}
+				MetaResource mr = bsonAdapter.readMetaResource(dbObject);
+				if (mr != null) {
+					result.add(mr);
+				}
+			} else {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Null object, not added");
+				}
 			}
 		}
 

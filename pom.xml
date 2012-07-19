@@ -24,6 +24,7 @@
 		<module>play-metadata-war</module>
     	<module>play-metadata-json</module>
     	<module>play-metadata-mongodb</module>
+    	<module>play-metadata-mongodb-war</module>
     	<module>play-metadata-inject</module>
   </modules>
 

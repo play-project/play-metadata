@@ -56,14 +56,41 @@ public class MongoMetadataServiceImplTest extends TestCase {
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
+		String name = UUID.randomUUID().toString();
+
 		try {
-			mongoMetadataServiceImpl.addMetadata(new Resource("foo",
+			mongoMetadataServiceImpl.addMetadata(new Resource(name,
 					"http://bar"), new Metadata("dsburl", new Data("url",
 					"http://localhost")));
 		} catch (MetadataException e) {
 			e.printStackTrace();
 			fail();
 		}
+
+		System.out.println("Created resource with name " + name);
+	}
+	
+	/**
+	 * Test create a new metadata
+	 * 
+	 * @throws Exception
+	 */
+	public void testCreate() throws Exception {
+		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+		mongoMetadataServiceImpl.init();
+
+		String name = UUID.randomUUID().toString();
+
+		try {
+			mongoMetadataServiceImpl.addMetadata(new Resource(name,
+					"http://bar"), null);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		System.out.println("Created resource with name " + name);
 	}
 
 	public void testFindFirstResource() throws Exception {
