@@ -20,6 +20,7 @@
 package org.ow2.play.metadata.mongodb;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import junit.framework.TestCase;
@@ -37,6 +38,19 @@ import com.mongodb.DBObject;
  */
 public class MongoMetadataServiceImplTest extends TestCase {
 
+	Properties props;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		props = new Properties();
+		props.setProperty("mongo.collection", "playmetadatatest");
+	}
+
 	public void testInitialized() {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
 		try {
@@ -48,11 +62,13 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testInit() {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.init();
 	}
 
 	public void testAddMetadata() {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -69,7 +85,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 		System.out.println("Created resource with name " + name);
 	}
-	
+
 	/**
 	 * Test create a new metadata
 	 * 
@@ -77,6 +93,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 	 */
 	public void testCreate() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -95,6 +112,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testFindFirstResource() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -130,6 +148,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testFindAllResource() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -158,6 +177,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testRemove() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -181,6 +201,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testAddMetadataToexistingResource() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -213,6 +234,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testGetMetadata() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
@@ -235,6 +257,7 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 	public void testGetMetadataValue() throws Exception {
 		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
 		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
 		mongoMetadataServiceImpl.init();
 
