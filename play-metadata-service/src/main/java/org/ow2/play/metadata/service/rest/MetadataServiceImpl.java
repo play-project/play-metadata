@@ -22,7 +22,6 @@ package org.ow2.play.metadata.service.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.ow2.play.metadata.api.MetadataException;
@@ -49,7 +48,7 @@ public class MetadataServiceImpl implements MetadataService {
 		return Response.ok("Data deleted").build();
 	}
 
-	public Response load(@QueryParam("url") String url) {
+	public Response load(String url) {
 		if (bootstrap == null || url == null) {
 			return Response.serverError().build();
 		}
