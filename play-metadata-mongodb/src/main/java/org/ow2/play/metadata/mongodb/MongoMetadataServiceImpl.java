@@ -37,7 +37,6 @@ import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
 import org.ow2.play.metadata.api.service.Initializable;
 import org.ow2.play.metadata.api.service.MetadataService;
-import org.ow2.play.metadata.api.service.MetadataStorage;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
@@ -48,6 +47,7 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.ServerAddress;
+import com.mongodb.WriteResult;
 
 /**
  * @author chamerling
@@ -105,7 +105,8 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 			port = properties.getProperty("mongo.port", DEFAULT_MONGO_DB_PORT);
 			userName = properties.getProperty("mongo.username", userName);
 			password = properties.getProperty("mongo.password", password);
-			collectionName = properties.getProperty("mongo.collection", DEFAULT_MONGO_DB_COLLECTION_NAME);
+			collectionName = properties.getProperty("mongo.collection",
+					DEFAULT_MONGO_DB_COLLECTION_NAME);
 		}
 
 		if (logger.isLoggable(Level.INFO)) {
@@ -133,6 +134,13 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 		initialized = true;
 	}
 
+	@Override
+	public void clear() throws MetadataException {
+		logger.info("Got a clear call");
+		checkInitialized();
+		clearCollection();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -155,7 +163,7 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 		if (o != null) {
 
 			if (logger.isLoggable(Level.FINE))
-			logger.fine("Resource already exists, Add metadata to the current entry");
+				logger.fine("Resource already exists, Add metadata to the current entry");
 			// update the current record
 
 			Object meta = o.get("metadata");
@@ -500,6 +508,17 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 			result.add(iter.next());
 		}
 		return result;
+	}
+	
+	protected void clearCollection() {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Remove all objects from the collection");
+		}
+		WriteResult wr = getDbCollection().remove(new BasicDBObject());
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Write result : " + wr);
+		}
 	}
 
 	protected void checkInitialized() throws MetadataException {

@@ -36,6 +36,14 @@ import org.ow2.play.metadata.api.Resource;
  */
 @WebService(targetNamespace="http://service.metadata.play.ow2.org/")
 public interface MetadataService {
+	
+	/**
+	 * Clear all the metadatas
+	 * 
+	 * @throws MetadataException
+	 */
+	@WebMethod
+	void clear() throws MetadataException;
 
 	/**
 	 * Add metadata to a resource. Creates the resource if it do not exists.

@@ -60,6 +60,12 @@ public class MetadataClient implements MetadataService {
 		return this.client;
 	}
 
+	@Override
+	@WebMethod
+	public void clear() throws MetadataException {
+		getClient().clear();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

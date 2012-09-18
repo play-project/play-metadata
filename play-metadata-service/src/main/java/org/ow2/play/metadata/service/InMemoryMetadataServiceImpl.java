@@ -74,6 +74,12 @@ public class InMemoryMetadataServiceImpl implements
 
 		this.metadata.get(resource).add(metadata);
 	}
+	
+	@Override
+	@WebMethod
+	public void clear() throws MetadataException {
+		this.metadata = new ConcurrentHashMap<Resource, Set<Metadata>>();
+	}
 
 	/*
 	 * (non-Javadoc)
