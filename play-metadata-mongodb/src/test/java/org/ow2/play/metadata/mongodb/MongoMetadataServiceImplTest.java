@@ -277,4 +277,61 @@ public class MongoMetadataServiceImplTest extends TestCase {
 		assertEquals(new Data("url", "http://localhost"), md.getData().get(0));
 
 	}
+	
+	public void testExistsNull() {
+		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
+		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+		mongoMetadataServiceImpl.init();
+		
+		try {
+			mongoMetadataServiceImpl.exists(null);
+			fail();
+		} catch (MetadataException e) {
+		}
+		
+		Resource r = new Resource();
+		try {
+			mongoMetadataServiceImpl.exists(r);
+			fail();
+		} catch (MetadataException e) {
+		}
+		
+		r.setName("me");
+		try {
+			mongoMetadataServiceImpl.exists(r);
+			fail();
+		} catch (MetadataException e) {
+		}
+		
+		r.setName(null);
+		r.setUrl("foobar");
+		try {
+			mongoMetadataServiceImpl.exists(r);
+			fail();
+		} catch (MetadataException e) {
+		}
+	}
+	
+	public void testCreateAndCheck() throws Exception {
+		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
+		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+		mongoMetadataServiceImpl.init();
+		
+		// create a resource
+		String name = UUID.randomUUID().toString();
+		Resource r = new Resource(name, "http://" + name);
+		
+		try {
+			mongoMetadataServiceImpl.addMetadata(r, null);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		// check if it exists
+		assertTrue(mongoMetadataServiceImpl.exists(r));
+		
+	}
 }

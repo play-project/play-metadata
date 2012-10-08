@@ -119,4 +119,14 @@ public interface MetadataService {
 	 */
 	@WebMethod
 	List<MetaResource> list() throws MetadataException;
+	
+	/**
+	 * Check if a resource exists in the repository
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws MetadataException
+	 */
+	@WebMethod
+	boolean exists(Resource resource) throws MetadataException;
 }

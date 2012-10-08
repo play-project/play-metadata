@@ -159,5 +159,14 @@ public class MetadataClient implements MetadataService {
 	public List<MetaResource> list() throws MetadataException {
 		return getClient().list();
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#exists(org.ow2.play.metadata.api.Resource)
+	 */
+	@Override
+	@WebMethod
+	public boolean exists(Resource resource) throws MetadataException {
+		return getClient().exists(resource);
+	}
 
 }

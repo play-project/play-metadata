@@ -206,6 +206,15 @@ public class InMemoryMetadataServiceImpl implements
 		}
 		return result;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#exists(org.ow2.play.metadata.api.Resource)
+	 */
+	@Override
+	@WebMethod
+	public boolean exists(Resource resource) throws MetadataException {
+		return resourceExists(resource);
+	}
 
 	protected boolean resourceExists(Resource r) {
 		return r != null && metadata.containsKey(r);

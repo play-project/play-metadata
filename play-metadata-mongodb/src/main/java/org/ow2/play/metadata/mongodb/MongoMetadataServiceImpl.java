@@ -361,6 +361,17 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 
 		return result;
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#exists(org.ow2.play.metadata.api.Resource)
+	 */
+	@Override
+	public boolean exists(Resource resource) throws MetadataException {
+		if (resource == null || resource.getName() == null || resource.getUrl() == null) {
+			throw new MetadataException("Can not search a null object...");
+		}
+		return (findFirst(resource) != null);
+	}
 
 	/*
 	 * This method could be overridden to provide the DB instance from an
