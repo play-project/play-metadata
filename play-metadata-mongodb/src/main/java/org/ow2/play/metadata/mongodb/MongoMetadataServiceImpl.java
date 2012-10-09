@@ -195,6 +195,47 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 			}
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#create(org.ow2.play.metadata.api.MetaResource)
+	 */
+	@Override
+	public boolean create(MetaResource metaResource) throws MetadataException {
+		boolean result = true;
+		
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Create metaresource " + metaResource);
+		}
+		
+		if (metaResource == null || metaResource.getResource() == null) {
+			logger.warning("Can not create a null resource");
+			throw new MetadataException("Can not create a null resource...");
+		}
+		
+		// will create the resource if it does not exists, else add metas
+		checkInitialized();
+		DBObject o = findFirst(metaResource.getResource());
+		
+		if (o == null) {
+			// create from root
+			DBObject bson = bsonAdapter.createBSON(metaResource);
+			try {
+				this.collection.insert(bson);
+			} catch (MongoException e) {
+				throw new MetadataException(e);
+			}
+		} else {
+			// we do not accept operation if the resource already exists in the
+			// repository
+			// if needed, use the #addMetadata method.
+			final String message = "The resource already exists, can not be created. Use #addMetadata if you want to populate resource";
+			logger.warning(message);
+			throw new MetadataException(message);
+		}
+		
+		
+		return result;
+	}
 
 	/*
 	 * (non-Javadoc)

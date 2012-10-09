@@ -79,6 +79,15 @@ public class MetadataClient implements MetadataService {
 			throws MetadataException {
 		getClient().addMetadata(resource, metadata);
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#create(org.ow2.play.metadata.api.MetaResource)
+	 */
+	@Override
+	@WebMethod
+	public boolean create(MetaResource metaResource) throws MetadataException {
+		return getClient().create(metaResource);
+	}
 
 	/*
 	 * (non-Javadoc)

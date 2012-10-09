@@ -26,10 +26,13 @@ import java.util.UUID;
 import junit.framework.TestCase;
 
 import org.ow2.play.metadata.api.Data;
+import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
+import org.ow2.play.metadata.api.Type;
 
+import com.google.common.collect.Lists;
 import com.mongodb.DBObject;
 
 /**
@@ -332,6 +335,41 @@ public class MongoMetadataServiceImplTest extends TestCase {
 		
 		// check if it exists
 		assertTrue(mongoMetadataServiceImpl.exists(r));
+		
+	}
+	
+	public void testCreateMetaResource() throws Exception {
+		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
+		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+		mongoMetadataServiceImpl.init();
+		
+		// create a resource
+		String name = UUID.randomUUID().toString();
+		Resource r = new Resource(name, "http://" + name);
+		
+		MetaResource mr = new MetaResource(r, Lists.newArrayList(new Metadata(
+				"1", new Data(Type.LITERAL, "A")), new Metadata("2", new Data(
+				Type.LITERAL, "B"))));
+		
+		try {
+			mongoMetadataServiceImpl.create(mr);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+		
+		// check if it exists
+		assertTrue(mongoMetadataServiceImpl.exists(mr.getResource()));
+		
+		// create again will fail
+		try {
+			mongoMetadataServiceImpl.create(mr);
+			fail();
+		} catch (MetadataException e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 }

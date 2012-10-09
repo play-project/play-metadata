@@ -75,6 +75,23 @@ public class InMemoryMetadataServiceImpl implements
 		this.metadata.get(resource).add(metadata);
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#create(org.ow2.play.metadata.api.MetaResource)
+	 */
+	@Override
+	@WebMethod
+	public boolean create(MetaResource metaResource) throws MetadataException {
+		logger.info("Create metaresource " + metaResource);
+		if (!resourceExists(metaResource.getResource())) {
+			create(metaResource.getResource());
+		}
+		
+		for (Metadata md : metaResource.getMetadata()) {
+			addMetadata(metaResource.getResource(), md);
+		}
+		return true;
+	}
+	
 	@Override
 	@WebMethod
 	public void clear() throws MetadataException {

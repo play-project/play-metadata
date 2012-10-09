@@ -55,6 +55,16 @@ public interface MetadataService {
 	@WebMethod
 	void addMetadata(Resource resource, Metadata metadata)
 			throws MetadataException;
+	
+	/**
+	 * Creates a meta resource ie a resource with all its metadatas...
+	 * 
+	 * @param metaResource
+	 * @return
+	 * @throws MetadataException
+	 */
+	@WebMethod
+	boolean create(MetaResource metaResource) throws MetadataException;
 
 	/**
 	 * Remove the metadata from the resource
