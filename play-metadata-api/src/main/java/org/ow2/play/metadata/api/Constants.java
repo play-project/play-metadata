@@ -27,6 +27,19 @@ public interface Constants {
 	
 	public static final String NS = "http://play.ow2.org/metadata";
 	
+	/**
+	 * Metadata creation time
+	 */
 	public static final String CREATED_AT = NS + "/createdat";
+	
+	/**
+	 * The metadata can be linked to a complex event
+	 */
+	public static final String COMPLEX_EVENT = "http://www.play-project.eu/xml/ns/complexEvents";
 
+	/**
+	 * Use {@value #COMPLEX_EVENT}
+	 */
+	@Deprecated
+	public static final String DSB_NEEDS_TO_SUBSCRIBE = "http://www.play-project.eu/xml/ns/dsbneedstosubscribe";
 }
