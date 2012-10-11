@@ -30,11 +30,13 @@ import java.util.logging.Logger;
 import javax.jws.WebMethod;
 
 import org.bson.types.BasicBSONList;
+import org.ow2.play.metadata.api.Constants;
 import org.ow2.play.metadata.api.Data;
 import org.ow2.play.metadata.api.MetaResource;
 import org.ow2.play.metadata.api.Metadata;
 import org.ow2.play.metadata.api.MetadataException;
 import org.ow2.play.metadata.api.Resource;
+import org.ow2.play.metadata.api.Type;
 import org.ow2.play.metadata.api.service.Initializable;
 import org.ow2.play.metadata.api.service.MetadataService;
 
@@ -211,6 +213,11 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 			logger.warning("Can not create a null resource");
 			throw new MetadataException("Can not create a null resource...");
 		}
+		
+		// add creation date
+		metaResource.getMetadata().add(
+				new Metadata(Constants.CREATED_AT, new Data(Type.LITERAL, ""
+						+ System.currentTimeMillis())));
 		
 		// will create the resource if it does not exists, else add metas
 		checkInitialized();
