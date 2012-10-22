@@ -198,6 +198,66 @@ public class MongoMetadataServiceImpl implements MetadataService, Initializable 
 		}
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2
+	 * .play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)
+	 */
+	@Override
+	public void setMetadata(Resource resource, Metadata metadata)
+			throws MetadataException {
+		if (logger.isLoggable(Level.INFO))
+			logger.info(String.format("Setting metdata %s to resource %s",
+					metadata, resource));
+
+		checkInitialized();
+
+		DBObject o = findFirst(resource);
+		if (o != null) {
+			if (logger.isLoggable(Level.FINE))
+				logger.fine("Resource already exists, Add metadata to the current entry");
+			// update the current record
+
+			Object meta = o.get("metadata");
+			if (meta != null && meta instanceof BasicBSONList) {
+				BasicBSONList list = (BasicBSONList) meta;
+				boolean found = false;
+				
+				for (Object object : list) {
+					if (object != null && object instanceof DBObject) {
+						DBObject entry = (DBObject) object;
+						if (entry.get("name") != null && entry.get("name").toString().equals(metadata.getName())) {
+							found = true;
+							// update the entry with the input value
+							BasicBSONList bsl = new BasicBSONList();
+							for (Data data : metadata.getData()) {
+								bsl.add(bsonAdapter.createBSON(data));
+							}
+							entry.put("data", bsl);
+						}
+					}
+				}
+				
+				if (!found) {
+					// create the metadata and add it to the resource
+					DBObject dbo = bsonAdapter.createBSON(metadata);
+					list.add(dbo);
+				}
+				
+				// will update the entry
+				this.collection.save(o);
+			} else {
+				if (logger.isLoggable(Level.WARNING))
+					logger.warning("Can not find the list to add metadata to...");
+			}
+		} else {
+			// do bot create
+			throw new MetadataException("Can not add a metadata to a resource that does not exists");
+		}	
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.ow2.play.metadata.api.service.MetadataService#create(org.ow2.play.metadata.api.MetaResource)
 	 */

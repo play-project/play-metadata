@@ -88,6 +88,70 @@ public class MongoMetadataServiceImplTest extends TestCase {
 
 		System.out.println("Created resource with name " + name);
 	}
+	
+	public void testSetMetadataUpdate() throws Exception {
+		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
+		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+		mongoMetadataServiceImpl.init();
+
+		String name = UUID.randomUUID().toString();
+
+		Resource resource = new Resource(name,
+				"http://bar");
+		Metadata md = new Metadata("dsburl", new Data("url",
+				"http://localhost"));
+		try {
+			mongoMetadataServiceImpl.addMetadata(resource, md);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		System.out.println("Created resource with name " + name);
+		
+		// update the metadata
+		Metadata mdupdate = new Metadata("dsburl", new Data("url",
+				"http://ow2.org"));
+		try {
+			mongoMetadataServiceImpl.setMetadata(resource, mdupdate);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+	
+	public void testSetMetadataAdd() throws Exception {
+		MongoMetadataServiceImpl mongoMetadataServiceImpl = new MongoMetadataServiceImpl();
+		mongoMetadataServiceImpl.setProperties(props);
+		mongoMetadataServiceImpl.setBsonAdapter(new BSONAdapterImpl());
+		mongoMetadataServiceImpl.init();
+
+		String name = UUID.randomUUID().toString();
+
+		Resource resource = new Resource(name,
+				"http://testSetMetadataAdd");
+		Metadata md = new Metadata("dsburl", new Data("url",
+				"http://localhost"));
+		try {
+			mongoMetadataServiceImpl.addMetadata(resource, md);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+
+		System.out.println("Created resource with name " + name);
+		
+		// update the metadata
+		Metadata mdadd = new Metadata("dsburl2", new Data("url",
+				"http://ow2.org"));
+		try {
+			mongoMetadataServiceImpl.setMetadata(resource, mdadd);
+		} catch (MetadataException e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
 
 	/**
 	 * Test create a new metadata

@@ -55,6 +55,15 @@ public interface MetadataService {
 	@WebMethod
 	void addMetadata(Resource resource, Metadata metadata)
 			throws MetadataException;
+
+	/**
+	 * Set the metadata value to the resource. Create the metadata if it does not exists.
+	 * 
+	 * @param resource
+	 * @param metadata
+	 * @throws MetadataException
+	 */
+	void setMetadata(Resource resource, Metadata metadata) throws MetadataException;
 	
 	/**
 	 * Creates a meta resource ie a resource with all its metadatas...

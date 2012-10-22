@@ -38,6 +38,7 @@ import org.ow2.play.metadata.api.Resource;
 
 /**
  * @author chamerling
+ * @deprecated use Mongo-based version
  * 
  */
 public class InMemoryMetadataServiceImpl implements
@@ -222,6 +223,15 @@ public class InMemoryMetadataServiceImpl implements
 			}
 		}
 		return result;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.ow2.play.metadata.api.service.MetadataService#setMetadata(org.ow2.play.metadata.api.Resource, org.ow2.play.metadata.api.Metadata)
+	 */
+	@Override
+	public void setMetadata(Resource resource, Metadata metadata)
+			throws MetadataException {
+		// not implemented	
 	}
 	
 	/* (non-Javadoc)
